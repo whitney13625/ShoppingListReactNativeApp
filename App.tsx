@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, Text, TouchableOpacity } from 'react-native';
 import { tokenStorage } from './src/api/client';
 
 import LoginScreen from './src/screens/auth/LoginScreen';
@@ -13,6 +13,7 @@ import PostsScreen from './UI/posts/PostsScreen';
 import { ShoppingItem } from './src/types';
 import ShoppingItemDetailScreen from './src/screens/shopping/ShoppingItemDetailScreen';
 import ShoppingListScreen from './src/screens/shopping/ShoppingListScreen';
+import { authApi } from './src/api/authApi';
 
 export type RootStackParamList = {
   Main: undefined;
@@ -35,6 +36,7 @@ function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        headerShown: true,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap;
           if (route.name === 'ShoppingList') {

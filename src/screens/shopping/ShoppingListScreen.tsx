@@ -13,29 +13,45 @@ import { commonStyles } from '../../styles/common';
 import { RootStackParamList, TabParamList } from '../../../App';
 import { AddIcon, DisclosureIndicator } from '../../components/Icons';
 import { useAppNavigation } from '../../hooks/useAppNavigation';
+import { authApi } from '../../api/authApi';
+import { tokenStorage } from '../../api/client';
 
 type Props = CompositeScreenProps<
-  BottomTabScreenProps<TabParamList, 'Home'>,
+  BottomTabScreenProps<TabParamList, 'ShoppingList'>,
   NativeStackScreenProps<RootStackParamList>
 >;
 
-export default function ShoppingListScreen() {    
+export default function ShoppingListScreen({ navigation }: Props) {    
     const [shoppingItems, setShoppingItems] = useState<ShoppingItem[]>([]);
 
-    const navigation = useAppNavigation();
+    const stackNavigation = useAppNavigation();
 
     useFocusEffect(
         useCallback(() => {
-            shoppingApi.getAll().then(response => {
-            setShoppingItems(response.data);
-            });
+            shoppingApi.getAll()
+            .then(response => {
+                setShoppingItems(response.data);
+            })
+            .catch(error => {
+                console.log('fetch error:', error.response?.status);
+                if (error.response?.status === 401) {
+                // token 過期，清除 token
+                tokenStorage.remove();
+                }
+            })
         }, [])
     );
 
     useLayoutEffect(() => {
+        console.log('useLayoutEffect called', navigation); // 加這行
         navigation.setOptions({
+        headerLeft: () => (
+            <TouchableOpacity style={{ marginLeft: 16 }} onPress={() => authApi.logout() }>
+            <Text style={{ color: '#007AFF' }}>Logout</Text>
+            </TouchableOpacity>
+        ),
         headerRight: () => (
-            <TouchableOpacity style={{ marginEnd: 20 }} onPress={() => navigation.navigate('ShoppingItemDetail', {})}>
+            <TouchableOpacity style={{ marginEnd: 20 }} onPress={() => stackNavigation.navigate('ShoppingItemDetail', {})}>
             <AddIcon/>
             </TouchableOpacity>
         ),
