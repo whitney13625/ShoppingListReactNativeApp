@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -6,9 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ActivityIndicator, View, Text, TouchableOpacity } from 'react-native';
 
 import LoginScreen from './src/screens/auth/LoginScreen';
-import HomeScreen from './UI/HomeScreen';
-import ListScreen from './UI/ListScreen';
-import PostsScreen from './UI/posts/PostsScreen';
+import CategoriesScreen from './src/screens/categories/CategoriesScreen';
 import { ShoppingItem } from './src/types';
 import ShoppingItemDetailScreen from './src/screens/shopping/ShoppingItemDetailScreen';
 import ShoppingListScreen from './src/screens/shopping/ShoppingListScreen';
@@ -18,14 +15,12 @@ export type RootStackParamList = {
   Main: undefined;
   Login: undefined;
   ShoppingItemDetail: { item?: ShoppingItem }; // optional = 新增模式
-  Detail: { id: number; title: string };
+  CategoriesDetail: { id: number; title: string };
 };
 
 export type TabParamList = {
   ShoppingList: undefined;
-  Home: undefined;
-  List: undefined;
-  Posts: undefined;
+  Categories: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -41,12 +36,8 @@ function TabNavigator() {
           if (route.name === 'ShoppingList') {
             iconName = focused ? 'list' : 'list-outline';
           }
-          else if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'List') {
-            iconName = focused ? 'list' : 'list-outline';
-          } else {
-            iconName = focused ? 'document-text' : 'document-text-outline';
+          else {
+            iconName = focused ? 'folder' : 'folder-outline';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -55,9 +46,7 @@ function TabNavigator() {
       })}
     >
       <Tab.Screen name="ShoppingList" component={ShoppingListScreen} />
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="List" component={ListScreen} />
-      <Tab.Screen name="Posts" component={PostsScreen} />
+      <Tab.Screen name="Categories" component={CategoriesScreen} />
     </Tab.Navigator>
   );
 }
