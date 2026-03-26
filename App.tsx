@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { ActivityIndicator, View, Text, TouchableOpacity } from 'react-native';
-import { tokenStorage } from './src/api/client';
 
 import LoginScreen from './src/screens/auth/LoginScreen';
 import HomeScreen from './UI/HomeScreen';
@@ -13,7 +12,7 @@ import PostsScreen from './UI/posts/PostsScreen';
 import { ShoppingItem } from './src/types';
 import ShoppingItemDetailScreen from './src/screens/shopping/ShoppingItemDetailScreen';
 import ShoppingListScreen from './src/screens/shopping/ShoppingListScreen';
-import { authApi } from './src/api/authApi';
+import { AuthProvider, useAuth } from './src/context/AuthContext';
 
 export type RootStackParamList = {
   Main: undefined;
@@ -63,6 +62,45 @@ function TabNavigator() {
   );
 }
 
+function AppNavigator() {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="#007AFF" />
+      </View>
+    );
+  }
+
+  return (
+    <NavigationContainer>
+      {isAuthenticated ? (
+        <Stack.Navigator>
+          <Stack.Screen name="Main" component={TabNavigator} options={{ headerShown: false }} />
+          <Stack.Screen name="ShoppingItemDetail" component={ShoppingItemDetailScreen} />
+        </Stack.Navigator>
+      ) : (
+        <Stack.Navigator>
+          <Stack.Screen name="Login" options={{ headerShown: false }}>
+            {() => <LoginScreen />}
+          </Stack.Screen>
+        </Stack.Navigator>
+      )}
+    </NavigationContainer>
+  );
+}
+
+// App 包上 AuthProvider
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppNavigator />
+    </AuthProvider>
+  );
+}
+
+/*
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -110,3 +148,4 @@ export default function App() {
     </NavigationContainer>
   );
 }
+*/

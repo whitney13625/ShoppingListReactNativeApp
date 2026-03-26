@@ -1,24 +1,27 @@
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { authApi } from '../../api/authApi';
+import { useAuth } from '../../context/AuthContext';
 
 type LoginScreenProps = {
   onLoginSuccess: () => void;
 };
 
-export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
+export default function LoginScreen() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const { login } = useAuth();
 
     const handleLogin = async () => {
+        
         setLoading(true);
         setError(null);  // 每次嘗試前清除
         try {
             const response = await authApi.login(username, password);
-            onLoginSuccess();
+            await login(response.token); 
             console.log('Login successful:', response);
         } catch (error) {
             setError('Login failed. Please check your credentials.');

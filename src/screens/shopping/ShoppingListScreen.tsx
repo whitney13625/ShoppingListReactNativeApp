@@ -13,8 +13,7 @@ import { commonStyles } from '../../styles/common';
 import { RootStackParamList, TabParamList } from '../../../App';
 import { AddIcon, DisclosureIndicator } from '../../components/Icons';
 import { useAppNavigation } from '../../hooks/useAppNavigation';
-import { authApi } from '../../api/authApi';
-import { tokenStorage } from '../../api/client';
+import { useAuth } from '../../context/AuthContext';
 
 type Props = CompositeScreenProps<
   BottomTabScreenProps<TabParamList, 'ShoppingList'>,
@@ -26,6 +25,8 @@ export default function ShoppingListScreen({ navigation }: Props) {
 
     const stackNavigation = useAppNavigation();
 
+    const { logout } = useAuth();
+
     useFocusEffect(
         useCallback(() => {
             shoppingApi.getAll()
@@ -35,8 +36,7 @@ export default function ShoppingListScreen({ navigation }: Props) {
             .catch(error => {
                 console.log('fetch error:', error.response?.status);
                 if (error.response?.status === 401) {
-                // token 過期，清除 token
-                tokenStorage.remove();
+                    logout(); // TODO: refrehh token and retry
                 }
             })
         }, [])
@@ -46,7 +46,7 @@ export default function ShoppingListScreen({ navigation }: Props) {
         console.log('useLayoutEffect called', navigation); // 加這行
         navigation.setOptions({
         headerLeft: () => (
-            <TouchableOpacity style={{ marginLeft: 16 }} onPress={() => authApi.logout() }>
+            <TouchableOpacity style={{ marginLeft: 16 }} onPress={logout}>
             <Text style={{ color: '#007AFF' }}>Logout</Text>
             </TouchableOpacity>
         ),
