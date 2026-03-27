@@ -14,6 +14,8 @@ import { RootStackParamList, TabParamList } from '../../../App';
 import { AddIcon, DisclosureIndicator } from '../../components/Icons';
 import { useAppNavigation } from '../../hooks/useAppNavigation';
 import { useAuth } from '../../context/AuthContext';
+import { Swipeable } from 'react-native-gesture-handler';
+
 
 type Props = CompositeScreenProps<
   BottomTabScreenProps<TabParamList, 'ShoppingList'>,
@@ -80,34 +82,52 @@ export default function ShoppingListScreen({ navigation }: Props) {
         }
     };
 
+    const handleDelete = async (itemId: string) => {
+        await shoppingApi.delete(itemId);
+        setShoppingItems(items => items.filter(i => i.id !== itemId));
+    };
+
+    const renderRightActions = (itemId: string) => (
+    <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => handleDelete(itemId)}
+    >
+        <Text style={styles.deleteText}>Delete</Text>
+    </TouchableOpacity>
+    );
+
     return (
         <View style={commonStyles.container}>
             <Text style={commonStyles.title}>Shopping List</Text>
-            <FlatList 
-                style={commonStyles.list} 
-                data={shoppingItems} 
-                refreshing={isRefreshing}
-                onRefresh={handleRefresh}
-                renderItem={( { item } ) => (
-                    <TouchableOpacity
-                        style={styles.rowContent}
-                        onPress={() => navigation.navigate('ShoppingItemDetail', { item: item }) } 
-                    >
-                        <View style={styles.rowContentLeft}>
-                            <Text style={styles.itemName}>{item.name}</Text>
-                            <Text style={styles.itemNormal}>Quantity: {item.quantity}</Text>
-                            <Text style={styles.itemGray}>Category: {item.category.name}</Text>
-                        </View>
-                        <View style={styles.rowContentRight}>
-                            <Text style={styles.itemNormal}>Purchased?</Text>
-                            <Switch style={{ alignSelf: 'flex-end' }}
-                                value={item.purchased}
-                                onValueChange={(newValue) => handleToggle(item.id, newValue)}
-                            />
-                        </View>
-                        <DisclosureIndicator />
-                    </TouchableOpacity>
-                )} />
+                <FlatList 
+                    style={commonStyles.list} 
+                    data={shoppingItems} 
+                    refreshing={isRefreshing}
+                    onRefresh={handleRefresh}
+                    renderItem={( { item } ) => (
+                        <Swipeable renderRightActions={() => renderRightActions(item.id)}>
+                        <TouchableOpacity
+                            style={styles.rowContent}
+                            onPress={() => navigation.navigate('ShoppingItemDetail', { item: item }) } 
+                        >
+                            <View style={styles.rowContentLeft}>
+                                <Text style={styles.itemName}>{item.name}</Text>
+                                <Text style={styles.itemNormal}>Quantity: {item.quantity}</Text>
+                                <Text style={styles.itemGray}>Category: {item.category.name}</Text>
+                            </View>
+                            <View style={styles.rowContentRight}>
+                                <Text style={styles.itemNormal}>Purchased?</Text>
+                                <Switch style={{ alignSelf: 'flex-end' }}
+                                    value={item.purchased}
+                                    onValueChange={(newValue) => handleToggle(item.id, newValue)}
+                                />
+                            </View>
+                            <DisclosureIndicator />
+                        </TouchableOpacity>
+                        </Swipeable>
+                    )} 
+                />
+            
         </View>
     );
 }
@@ -118,6 +138,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         alignItems: 'flex-start',
         paddingVertical: 12,
+        backgroundColor: '#fff',
     },
     rowContentLeft: {
         flex: 2,
@@ -140,5 +161,15 @@ const styles = StyleSheet.create({
     itemGray: {
         fontSize: 18,
         color: '#666',
+    },
+    deleteButton: {
+        backgroundColor: '#FF3B30',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 80,
+    },
+    deleteText: {
+        color: '#fff',
+        fontWeight: 'bold',
     },
 });

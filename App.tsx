@@ -1,3 +1,5 @@
+import 'react-native-gesture-handler';
+import { Swipeable } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,6 +12,7 @@ import { ShoppingItem } from './src/types';
 import ShoppingItemDetailScreen from './src/screens/shopping/ShoppingItemDetailScreen';
 import ShoppingListScreen from './src/screens/shopping/ShoppingListScreen';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export type RootStackParamList = {
   Main: undefined;
@@ -83,8 +86,10 @@ function AppNavigator() {
 // App 包上 AuthProvider
 export default function App() {
   return (
-    <AuthProvider>
-      <AppNavigator />
-    </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        <AppNavigator />
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 }
