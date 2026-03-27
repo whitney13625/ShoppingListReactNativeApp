@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, Text, TextInput, Switch, TouchableOpacity, StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Picker } from '@react-native-picker/picker';
 import { ShoppingItem, Category } from '../../types';
 import { shoppingApi } from '../../api/shoppingApi';
 import { categoriesApi } from '../../api/categoriesApi';
@@ -9,6 +8,7 @@ import { commonStyles } from '../../styles/common';
 import { FormSection } from '../../components/FormSection';
 import { FormRow } from '../../components/FormRow';
 import { Stepper } from '../../components/Stepper';
+import { CategoryPicker } from '../../components/CategoryPicker';
 import { RootStackParamList } from '../../../App';
 import { ActionSheetIOS, Platform } from 'react-native';
 import { Expand } from '../../components/Icons';
@@ -100,22 +100,11 @@ export default function ShoppingItemDetailScreen({ navigation, route }: Props) {
                 </FormRow>
                 <FormRow>
                     <Text >Category: </Text>
-                    {/* <Picker
-                        mode="dropdown"
-                        style={ { flex: 1, alignSelf: 'flex-end'} }
-                        selectedValue={categoryId}
-                        onValueChange={setCategoryId}
-                    >
-                        {categories.map(c => (
-                            <Picker.Item key={c.id} label={c.name} value={c.id} />
-                        ))}
-                    </Picker>   */}
-                    <View style={ { flexDirection: 'row', alignSelf: 'flex-end'} }> 
-                        <TouchableOpacity onPress={showCategoryPicker}>
-                            <Text style={ { alignSelf: 'flex-end', fontSize: 18, color: '#666' } }>{categories.find(c => c.id === categoryId)?.name || 'Select Category'}</Text>
-                        </TouchableOpacity>
-                        <Expand /> 
-                    </View>
+                    <CategoryPicker
+                        categories={categories}
+                        selectedId={categoryId}
+                        onSelect={(category) => setCategoryId(category.id)}
+                    />
                     
                 </FormRow>
                 <FormRow>

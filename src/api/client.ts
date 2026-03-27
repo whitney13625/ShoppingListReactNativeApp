@@ -1,7 +1,10 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 
-const HOST = process.env.EXPO_PUBLIC_API_HOST;
+const HOST = Platform.OS === 'android' 
+  ? process.env.EXPO_PUBLIC_API_HOST_ANDROID 
+  : process.env.EXPO_PUBLIC_API_HOST_IOS;
 const PORT = process.env.EXPO_PUBLIC_API_PORT;
 const BASE_URL = `http://${HOST}:${PORT}/api`;
 const TOKEN_KEY = 'auth_token';
