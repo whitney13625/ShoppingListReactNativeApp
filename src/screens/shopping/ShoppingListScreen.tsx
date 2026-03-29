@@ -60,16 +60,25 @@ export default function ShoppingListScreen({ navigation }: Props) {
         });
     }, [navigation]);
 
-    function handleToggle(itemId: string, newValue: boolean) {
+    async function handleToggle(itemId: string, newValue: boolean) {
         console.log(`Toggled item ${itemId} to ${newValue}`);
         const item =shoppingItems.find(i => i.id === itemId);
         if (!item) return;
 
-        shoppingApi.update(itemId, { purchased: newValue });
-       
-        setShoppingItems(shoppingItems.map(i => 
+    const previousValue = item.purchased;
+
+        setShoppingItems(prev => prev.map(i => 
         i.id === itemId ? { ...i, purchased: newValue } : i
-        ));
+    ));
+        try {
+            await shoppingApi.update(itemId, { purchased: newValue });
+        } catch (error) {
+            console.log('Error updating item:', error);
+            setShoppingItems(prev => prev.map(i => 
+                i.id === itemId ? { ...i, purchased: previousValue } : i
+            ));
+        }
+        
     }
 
     const handleRefresh = async () => {
