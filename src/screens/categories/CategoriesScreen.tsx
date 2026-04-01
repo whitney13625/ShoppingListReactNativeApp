@@ -1,5 +1,4 @@
-import { useLayoutEffect, useCallback } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import { useLayoutEffect } from 'react';
 import { 
   View, Text, TouchableOpacity, FlatList, StyleSheet
 } from 'react-native';
@@ -27,11 +26,9 @@ export default function CategoriesScreen({ navigation }: Props) {
     
         const { 
             items: categories, 
-            setItems: setCategories,
             isRefreshing, 
             handleRefresh, 
-            handleDelete,
-            execute: executeSetShoppingItems 
+            handleDelete
         } = useListScreen<Category>(categoriesApi.getAll);
     
     useLayoutEffect(() => {

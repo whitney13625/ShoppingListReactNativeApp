@@ -1,8 +1,6 @@
 import { useLayoutEffect, useCallback } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
 import { 
-  View, Text, FlatList, StyleSheet, TouchableOpacity, 
-  Switch
+  View, Text, FlatList, StyleSheet, TouchableOpacity, Switch
 } from 'react-native';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
