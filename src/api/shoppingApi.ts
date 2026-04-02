@@ -1,5 +1,5 @@
 import { apiClient } from './client';
-import { ShoppingItem, ShoppingItemsResponse } from '../types/ShoppingItem';
+import { ShoppingItem, ShoppingItemsResponse } from '../types/ShoppingItem.ts';
 
 export const shoppingApi = {
     getAll: async (): Promise<ShoppingItemsResponse> => {
