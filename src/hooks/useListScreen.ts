@@ -15,7 +15,7 @@ export function useListScreen<T extends { id: string }>(
       fetchFn()
       .then(response => setItems(response.data))
       .catch(error => {
-                console.log('fetch error:', error.response?.status);
+                console.error(error.response?.status);
             });
     }, [])
   );

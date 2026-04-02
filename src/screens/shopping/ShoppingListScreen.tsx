@@ -24,7 +24,7 @@ type Props = CompositeScreenProps<
 export default function ShoppingListScreen({ navigation }: Props) {    
     
     const stackNavigation = useAppNavigation();
-    
+
     const { 
         items: shoppingItems, 
         setItems: setShoppingItems,
@@ -46,7 +46,6 @@ export default function ShoppingListScreen({ navigation }: Props) {
     }, [navigation]);
 
     async function handleToggle(itemId: string, newValue: boolean) {
-        console.log(`Toggled item ${itemId} to ${newValue}`);
         const item = shoppingItems.find(i => i.id === itemId);
         if (!item) return;
 

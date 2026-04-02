@@ -4,7 +4,6 @@
 export function useOptimisticUpdate<T>(
   setState: React.Dispatch<React.SetStateAction<T[]>> 
 ) {
-  // 回傳一個 execute function
   const execute = async (
     optimisticUpdate: (prev: T[]) => T[], 
     apiCall: () => Promise<void>,          
@@ -14,7 +13,7 @@ export function useOptimisticUpdate<T>(
         setState(optimisticUpdate);
         await apiCall();
     } catch (error) {
-        console.log('Error performing optimistic update', error);
+        console.error(error);
         setState(rollback);
     }
   };

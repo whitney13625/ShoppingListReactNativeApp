@@ -18,11 +18,11 @@ export default function LoginScreen() {
     const handleLogin = async () => {
         
         setLoading(true);
-        setError(null);  // 每次嘗試前清除
+        setError(null);
+        
         try {
             const response = await authApi.login(username, password);
             await login(response.token); 
-            console.log('Login successful:', response);
         } catch (error) {
             setError('Login failed. Please check your credentials.');
             console.error('Login failed:', error);

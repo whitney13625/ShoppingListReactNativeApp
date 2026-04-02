@@ -11,8 +11,8 @@ React Native, TypeScript
 [v] create and delete a shopping item
 [v] mark a shopping item as purchased, or update shopping item attributes
 [] put purchased and non-purchased items in different sections
-[] create and delete a categories
-[] update category name or icon
+[v] create and delete a categories
+[v] update category name or icon
 
 ## Getting Started 
 Download npx, expo via terminal, then run
