@@ -30,7 +30,7 @@ export default function ShoppingItemDetailScreen({ navigation, route }: Props) {
 
         if (item) {
             setName(item.name);
-            setQuantity(item.quantity.toString());
+            setQuantity(item.quantity);
             setCategoryId(item.category.id);
             setPurchased(item.purchased);
         }
@@ -43,6 +43,7 @@ export default function ShoppingItemDetailScreen({ navigation, route }: Props) {
             quantity: quantity,
             categoryId,
             purchased,
+            category: categories.find(c => c.id === categoryId) ?? { id: categoryId, name: '' },
         };
 
         if (item) {

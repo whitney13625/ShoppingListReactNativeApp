@@ -53,7 +53,7 @@ export default function ShoppingListScreen({ navigation }: Props) {
             prev => prev.map(i => 
                 i.id === itemId ? { ...i, purchased: newValue } : i
             ),
-            () => shoppingApi.update(itemId, { purchased: newValue }),
+            () => shoppingApi.update(itemId, { purchased: newValue }).then(() => {}),
             prev => prev.map(i => 
                 i.id === itemId ? { ...i, purchased: previousValue } : i
             )
