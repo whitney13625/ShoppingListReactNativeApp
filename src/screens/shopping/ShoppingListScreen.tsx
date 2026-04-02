@@ -24,8 +24,7 @@ type Props = CompositeScreenProps<
 export default function ShoppingListScreen({ navigation }: Props) {    
     
     const stackNavigation = useAppNavigation();
-    const { logout } = useAuth();
-
+    
     const { 
         items: shoppingItems, 
         setItems: setShoppingItems,

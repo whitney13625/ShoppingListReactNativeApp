@@ -13,12 +13,19 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
+  
   useEffect(() => {
      setUnauthorizedHandler(logout);
-     setIsLoading(false);
-  }, []);
 
+    const checkToken = async () => {
+    const token = await tokenStorage.get();
+    setIsAuthenticated(!!token);
+    setIsLoading(false);
+  };
+  
+  checkToken();
+  }, []);
+  
   const login = async (token: string) => {
     await tokenStorage.save(token);
     setIsAuthenticated(true);

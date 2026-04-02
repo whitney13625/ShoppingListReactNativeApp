@@ -22,8 +22,6 @@ type Props = CompositeScreenProps<
 
 export default function CategoriesScreen({ navigation }: Props) {    
     const stackNavigation = useAppNavigation();
-        const { logout } = useAuth();
-    
         const { 
             items: categories, 
             isRefreshing, 
